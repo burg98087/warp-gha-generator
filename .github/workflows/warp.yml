@@ -1,0 +1,28 @@
+name: Generate WARP config
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set artifact name
+        id: vars
+        run: echo "artifact_name=warp-$(date -u +%m%d-%H%M%S)" >> $GITHUB_OUTPUT
+
+      - name: Run warp_generator
+        run: bash warp_generator_gha.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.vars.outputs.artifact_name }}
+          path: output/
+          retention-days: 1

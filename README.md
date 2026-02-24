@@ -1,2 +1,62 @@
-# warp-gha-generator
-Generate WARP for AmneziaVPN in Github Action
+# WARP Generator for GitHub Actions
+
+Этот репозиторий содержит скрипт `warp_generator.sh`, который генерирует WireGuard/AmneziaVPN-конфигурацию для Cloudflare WARP и предназначен **исключительно** для запуска внутри GitHub Actions.
+
+## Возможности
+
+- Регистрация устройства в Cloudflare WARP API и включение режима WARP.
+- Генерация приватного/публичного WireGuard-ключа на стороне GitHub Runner.
+- Формирование WireGuard-конфига `WARP.conf`.
+- Маскирование чувствительных данных в логах GitHub Actions.
+- Сохранение результатов в артефакты workflow (файлы в папке `output/`).
+
+## Структура проекта
+
+- `warp_generator.sh` — основной скрипт генерации.
+- `.github/workflows/warp.yml` — пример workflow для запуска в GitHub Actions.
+- `output/WARP.conf` — итоговый WireGuard-конфиг (создается при запуске).
+
+## Требования
+
+- Репозиторий на GitHub.
+- Включенный GitHub Actions.
+- Runner `ubuntu-latest`.
+
+Дополнительных секретов/переменных окружения для работы не требуется.
+
+## Настройка I1
+
+Внутри `warp_generator.sh` значение `I1` задается как константа:
+
+```bash
+readonly I1_VAL=""  # укажи нужное значение
+```
+
+1. Откройте `warp_generator.sh`.
+2. Впишите нужное фиксированное значение вместо пустой строки.
+3. Закоммитьте изменения.
+
+
+## Запуск workflow
+
+Workflow настроен на ручной запуск (`workflow_dispatch`).
+
+1. Перейдите на вкладку **Actions** в вашем репозитории.
+2. Выберите workflow `Generate WARP config`.
+3. Нажмите **Run workflow**.
+
+После выполнения джоба:
+
+- Откройте вкладку **Actions** → выберите последний запуск.
+- Внизу откройте раздел **Artifacts**.
+- Скачайте артефакт `warp-config`.
+- Внутри архива будут:
+  - `WARP.conf` — WireGuard/AmneziaWG-конфиг.
+
+## Безопасность
+
+- Конфиги и ключи сохраняются только в виде артефактов workflow.
+- Рекомендуется использовать **приватный** репозиторий, чтобы доступ к артефактам был только у вас.
+- При необходимости уменьшайте `retention-days` в `upload-artifact`, чтобы артефакты автоматически удалялись раньше.
+
+
