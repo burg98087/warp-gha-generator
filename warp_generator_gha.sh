@@ -62,6 +62,9 @@ EOM
 )
 
 mkdir -p output
-printf '%s\n' "${conf}" > output/WARP.conf
+artifact_name="warp-$(date -u +%m%d-%H%M%S)"
 
-echo "[OK] output/WARP.conf готов"
+printf '%s\n' "${conf}" > "output/${artifact_name}.conf"
+
+echo "[OK] output/${artifact_name}.conf готов"
+
